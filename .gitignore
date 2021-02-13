@@ -1,1 +1,8 @@
+#IDE
+/.vscode
+
+#Config
 App/Config/Database.php
+
+#External
+vendor
