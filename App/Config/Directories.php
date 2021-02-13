@@ -13,3 +13,6 @@ define('APP_DIR', ROOT_DIR.DS.'App');
 
 // Path to models directory
 define('MODELS_DIR', ROOT_DIR.DS.'Models');
+
+// Path to views directory
+define('VIEWS_DIR', ROOT_DIR.DS.'Views');
