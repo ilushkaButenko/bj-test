@@ -3,6 +3,7 @@
 
 #Config
 App/Config/Database.php
+App/Config/App.php
 
 #External
 vendor

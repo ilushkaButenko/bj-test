@@ -1,0 +1,8 @@
+<?php
+
+/**
+ * App config
+ */
+
+// Base uri, use if app dont place in domain root
+define('BASE_URI', '/');
