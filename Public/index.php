@@ -12,3 +12,7 @@ define('ROOT_DIR', dirname(__DIR__));
 // Load app
 require(ROOT_DIR.DS.'App'.DS.'Boot'.DS.'Autoloader.php');
 Autoloader::autoload();
+
+// Run app
+$app = new App();
+$app->run();

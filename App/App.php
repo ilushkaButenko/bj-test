@@ -2,16 +2,28 @@
 
 namespace iButenko\App;
 
+use iButenko\App\Router;
+
 /**
- * - Run app
- * - Controll and get access to db connection
+ * App
  */
 class App
-{
+{    
+    /**
+     * Run
+     * 
+     * Run application
+     *
+     * @return void
+     */
     public function Run()
     {
-        // Read path
-        // Get controller and method name from path
+        $router = new Router();
+        $router->findRealRoute($_SERVER['REQUEST_URI'], BASE_URI);
+
         // Run controller method
+        $className = $router->getControllerClassName();
+        $controller = new $className($router->getArgument());
+        $controller->{$router->getMethodName()}();
     }
 }
