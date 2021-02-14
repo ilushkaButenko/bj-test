@@ -14,5 +14,5 @@ require(ROOT_DIR.DS.'App'.DS.'Boot'.DS.'Autoloader.php');
 Autoloader::autoload();
 
 // Run app
-$app = new App();
+$app = App::getInstance();
 $app->run();
