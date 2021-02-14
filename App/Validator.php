@@ -16,6 +16,7 @@ class Validator
     private $dataType = '';
     private $data = '';
     private $inputName = '';
+    private $hasErrors = false;
     
     /**
      * __construct
@@ -115,6 +116,18 @@ class Validator
     }
     
     /**
+     * hasErrors
+     *
+     * Chack if validator has some errors
+     * 
+     * @return boolean
+     */
+    public function hasErrors()
+    {
+        return $this->hasErrors;
+    }
+    
+    /**
      * addError
      * 
      * Add error to errors array
@@ -129,6 +142,7 @@ class Validator
         } else {
             $this->errors[$this->inputName][] = $errorMessage;
         }
+        $this->hasErrors = true;
     }
     
     /**
@@ -164,6 +178,26 @@ class Validator
         }
         if ($result === false) {
             throw new Exception('Hey, man! Check your RegExp! That contains error: ' . $pattern);
+        }
+        return $this;
+    }
+    
+    /**
+     * isEmail
+     * 
+     * Just looks @ between any characters
+     *
+     * @return void
+     */
+    public function isEmail()
+    {
+        return $this->isMatch('/.+@.+/', 'Email address has invalid format');
+    }
+
+    public function isNotEmptyString()
+    {
+        if ($this->data == '') {
+            $this->addError('This field is required');
         }
         return $this;
     }
