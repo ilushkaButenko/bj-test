@@ -22,33 +22,28 @@ class TaskController extends Controller
         if (empty($_POST)) {
             return View::render('task-create');
         }
-    }
 
-    public function store()
-    {
-        // Validation
-        // Accept args
-        $validationErrors = [];
-
-        $nameValidatorResult = Validator::init($_POST['name'])
+        $validator = Validator::init($_POST['name'], 'name')
             ->isString()
-            ->isMatch('/[A-Z][a-z]+(\s[A-Z][a-z]+)?/', 'Invalid name')
-            ->error();
-        if ($nameValidatorResult !== false) {
-            $validationErrors[] = $nameValidatorResult;
-        }
+            ->isMatch('/[A-Z][a-z]+(\s[A-Z][a-z]+)?/', 'Invalid name');
+        
+        $validator->newValidation($_POST['email'], 'email')
+            ->isEmail();
 
-        if (isset($validationErrors)) {
+        $validator->newValidation($_POST['task'], 'task')
+            ->isNotEmptyString();
+
+        if ($validator->hasErrors()) {
             return View::render('task-create', [
                 'oldInput' => $_POST,
-                'errors' => $validationErrors
+                'errors' => $validator->getErrors()
             ]);
         }
 
         $newTask = new Task([
-            'name' => 'test',
-            'email' => 'YEAH',
-            'task' => 'BABY'
+            'name' => $_POST['name'],
+            'email' => $_POST['email'],
+            'task' => $_POST['task']
         ]);
         $newTask->save();
 
