@@ -10,6 +10,36 @@
     
 </div>
 
+<div class="row">
+    <form action="" method="POST">
+        <div class="row align-items-center">
+            <div class="col-md-auto">
+                <label for="orderBy" class="form-label col-md-auto">Order by:</label>
+            </div>
+            <div class="col-md-auto">
+                <select id="orderBy" name="orderBy" class="form-select" aria-label="Default select example">
+                    <option value="id" <?php echo $orderBy=='id' ? 'selected' : '' ?>>default</option>
+                    <option value="name" <?php echo $orderBy=='name' ? 'selected' : '' ?>>Name</option>
+                    <option value="email" <?php echo $orderBy=='email' ? 'selected' : '' ?>>Email</option>
+                    <option value="done" <?php echo $orderBy=='done' ? 'selected' : '' ?>>Done</option>
+                </select>
+            </div>
+            
+            <div class="col-md-auto">
+                <label for="orderDirection" class="form-label">Direction:</label>
+            </div>
+            <div class="col-md-auto">
+                <select id="orderDirection" name="orderDirection" class="form-select" aria-label="Default select example">
+                    <option value="asc" <?php echo $orderDirection=='asc' ? 'selected' : '' ?>>Asc</option>
+                    <option value="desc" <?php echo $orderDirection=='desc' ? 'selected' : '' ?>>Desc</option>
+                </select>
+            </div>
+            <div class="col-md-auto">
+                <button type="submit" class="btn btn-primary">Apply</button>
+            </div>
+        </div>
+    </form>
+</div>
 
 <div class="row">
     <table class="task-table table">

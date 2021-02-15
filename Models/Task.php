@@ -18,11 +18,11 @@ class Task extends Model
         'done',
     ];
 
-    public static function getTaskListPaginate($countPerPage, $pageNum = 1)
+    public static function getTaskListPaginate($countPerPage, $pageNum = 1, $orderBy = 'id', $orderDirection = 'DESC')
     {
         $pdo = App::getInstance()->getDatabase();
 
-        $sql = 'SELECT * FROM tasks ORDER BY id DESC LIMIT '
+        $sql = 'SELECT * FROM tasks ORDER BY ' . $orderBy . ' ' . $orderDirection . ' LIMIT '
             . (($pageNum - 1) * $countPerPage) . ', ' . ($countPerPage);
         $stmt = $pdo->prepare($sql);
         $stmt->execute();

@@ -34,16 +34,23 @@ class TaskController extends Controller
             $requestedPageNumber = $this->arg;
         }
 
-        // For uri
-        if ($requestedPageNumber == 1 && $_SERVER['REQUEST_URI'] !== '/task') {
+        // Redirect to /task if need 1st page
+        if ($requestedPageNumber == 1 && App::getInstance()->getRouter()->getClearUri() !== 'task') {
             App::getInstance()->redirect('task');
         }
 
+        $this->getOrderSettingsFromRequest();
+
+        $orderBy = isset($_SESSION['orderBy']) ? $_SESSION['orderBy'] : 'id';
+        $orderDirection = isset($_SESSION['orderDirection']) ? $_SESSION['orderDirection'] : 'desc';
+
         View::render('task-list', [
-            'tasks' => Task::getTaskListPaginate($tasksPerPage, $requestedPageNumber),
+            'tasks' => Task::getTaskListPaginate($tasksPerPage, $requestedPageNumber, $orderBy, $orderDirection),
             'pageCount' => $pageCount,
             'currentPage' => $requestedPageNumber,
-            'tasksPerPage' => $tasksPerPage
+            'tasksPerPage' => $tasksPerPage,
+            'orderBy' => $orderBy,
+            'orderDirection' => $orderDirection,
         ]);
     }
 
@@ -80,5 +87,27 @@ class TaskController extends Controller
         $newTask->save();
 
         header('Location: ' . BASE_URI . 'task');
+    }
+
+    private function getOrderSettingsFromRequest()
+    {
+        if (isset($_POST['orderBy'])) {
+            $validator = Validator::init($_POST['orderBy'], 'orderBy')
+                ->isString()
+                ->isMatch('/[a-zA-Z]+/');
+
+            $sortArgumentsErrors = $validator->getErrors();
+
+            $_SESSION['orderBy'] = $sortArgumentsErrors['orderBy'] === false ? $_POST['orderBy'] : 'id';
+        }
+
+        if (isset($_POST['orderDirection'])) {
+            $validator = Validator::init(strtolower($_POST['orderDirection']), 'orderDirection')
+                ->isString()
+                ->isMatch('/(asc)|(desc)/');
+            $sortArgumentsErrors = $validator->getErrors();
+
+            $_SESSION['orderDirection'] = $sortArgumentsErrors['orderDirection'] === false ? $_POST['orderDirection'] : 'DESC';
+        }
     }
 }
