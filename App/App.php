@@ -27,6 +27,8 @@ class App
     // db connection
     private $db = null;
 
+    private $router = null;
+
     /**
      * Run
      * 
@@ -36,15 +38,17 @@ class App
      */
     public function Run()
     {
+        session_start();
+
         $this->connectToDatabase();
 
-        $router = new Router();
-        $router->findRealRoute($_SERVER['REQUEST_URI'], BASE_URI);
+        $this->router = new Router();
+        $this->router->findRealRoute($_SERVER['REQUEST_URI'], BASE_URI);
 
         // Run controller method
-        $className = $router->getControllerClassName();
-        $controller = new $className($router->getArgument());
-        $controller->{$router->getMethodName()}();
+        $className = $this->router->getControllerClassName();
+        $controller = new $className($this->router->getArgument());
+        $controller->{$this->router->getMethodName()}();
     }
 
     private function connectToDatabase()
@@ -55,6 +59,11 @@ class App
     public function getDatabase(): \PDO
     {
         return $this->db;
+    }
+
+    public function getRouter(): Router
+    {
+        return $this->router;
     }
 
     public function redirect($uri, $code = 301)
