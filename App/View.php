@@ -35,6 +35,9 @@ class View
             }
         }
 
+        // Pass to view
+        $auth = $_SESSION['auth'];
+
         require(self::headerFileName);
         require($viewFileName);
         require(self::footerFileName);
