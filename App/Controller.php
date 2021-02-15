@@ -22,7 +22,7 @@ class Controller
         $this->arg = $arg;
     }
 
-    public static function filterHtmlInput($input)
+    protected static function filterHtmlInput($input)
     {
         $result = [];
         foreach ($input as $inputKey => $inputValue) {
