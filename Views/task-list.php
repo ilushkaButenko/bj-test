@@ -5,7 +5,13 @@
 
     <div class="col-md-6">
         <a class="btn btn-primary float-end" href="/task/create" role="button">Create task</a>
-        <a class="btn btn-primary float-end me-2" href="/task/list" role="button">Login as administrator</a>
+
+        <?php if ($auth): ?>
+        <a class="btn btn-primary float-end me-2" href="logout" role="button">Logout</a>
+        <?php else: ?>
+        <a class="btn btn-primary float-end me-2" href="login" role="button">Login as administrator</a>
+        <?php endif ?>
+        
     </div>
     
 </div>
@@ -50,6 +56,7 @@
                 <th>Email</th>
                 <th>Task</th>
                 <th>Done</th>
+                <?php if ($auth) echo '<th></th>' ?>
             </tr>
         </thead>
         <tbody>
@@ -61,9 +68,20 @@
                 <td><?php echo $task['task'] ?></td>
                 <td>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" <?php echo $task['task'] == 1 ? 'checked' : '' ?> disabled>
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" <?php echo $task['done'] == 1 ? 'checked' : '' ?> disabled>
                     </div>
                 </td>
+                <?php if ($auth): ?>
+                <td>
+                    <a class="btn btn-primary btn-sm" href="task/edit/<?php echo $task['id'] ?>" role="button">Edit</a>
+                    <a class="btn btn-danger btn-sm" href="task/delete/<?php echo $task['id'] ?>" role="button">Delete</a>
+                    <?php if ($task['done'] == 1): ?>
+                        <a class="btn btn-success btn-sm disabled" href="task/done/<?php echo $task['id'] ?>" role="button" aria-disabled="true">Mark as done</a>
+                    <?php else: ?>
+                        <a class="btn btn-success btn-sm" href="task/done/<?php echo $task['id'] ?>" role="button">Mark as done</a>
+                    <?php endif ?>
+                </td>
+                <?php endif ?>
             </tr>
             <?php $ctr++; endforeach; endif; ?>
         </tbody>
