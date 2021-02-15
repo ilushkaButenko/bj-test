@@ -1,4 +1,4 @@
-<form method="POST" action="/task/create" class="needs-validation" novalidate>
+<form method="POST" action="/task/create" class="needs-validation col-md-6 offset-md-3" novalidate>
 <div class="mb-3">
     <label for="name" class="form-label">Name</label>
     <input id="name" class="form-control <?php if ($errors['name']) echo 'is-invalid'; elseif ($errors['name'] === false) echo 'is-valid' ?>" aria-describedby="nameHelp" type="text" name="name" placeholder="Ilya Denisovich" pattern="[A-Z][a-z]+(\s[A-Z][a-z]+)?" required value="<?php echo $oldInput['name'] ?>">
