@@ -23,7 +23,7 @@ class TaskController extends Controller
         $requestedPageNumber = 1;
         $taskCount = Task::getRowCount();
         $tasksPerPage = 3;
-        $pageCount = ($taskCount / 3) + 1;
+        $pageCount = ($taskCount / $tasksPerPage) + (($taskCount % $tasksPerPage) ? 1 : 0);
 
         $validator = Validator::init($this->arg)
             ->isString()
@@ -53,30 +53,32 @@ class TaskController extends Controller
             return View::render('task-create');
         }
 
-        $validator = Validator::init($_POST['name'], 'name')
+        $filteredInput = static::filterHtmlInput($_POST);
+
+        $validator = Validator::init($filteredInput['name'], 'name')
             ->isString()
             ->isMatch('/[A-Z][a-z]+(\s[A-Z][a-z]+)?/', 'Invalid name');
         
-        $validator->newValidation($_POST['email'], 'email')
+        $validator->newValidation($filteredInput['email'], 'email')
             ->isEmail();
 
-        $validator->newValidation($_POST['task'], 'task')
+        $validator->newValidation($filteredInput['task'], 'task')
             ->isNotEmptyString();
 
         if ($validator->hasErrors()) {
             return View::render('task-create', [
-                'oldInput' => $_POST,
+                'oldInput' => $filteredInput,
                 'errors' => $validator->getErrors()
             ]);
         }
 
         $newTask = new Task([
-            'name' => $_POST['name'],
-            'email' => $_POST['email'],
-            'task' => $_POST['task']
+            'name' => $filteredInput['name'],
+            'email' => $filteredInput['email'],
+            'task' => $filteredInput['task']
         ]);
         $newTask->save();
 
-        header('Location: ' . BASE_URI . 'task/list');
+        header('Location: ' . BASE_URI . 'task');
     }
 }
