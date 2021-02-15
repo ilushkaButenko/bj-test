@@ -11,12 +11,12 @@ use iButenko\App\App;
 class Model
 {
     // required
-    protected $tableName = '';
+    protected static $tableName = '';
 
     // required
-    protected $columnNames = [];
+    protected static $columnNames = [];
 
-    protected $primaryKeyName = 'id';
+    protected static $primaryKeyName = 'id';
     protected $primaryKeyValue = '';
 
     protected $values = [];
@@ -27,10 +27,10 @@ class Model
     public function __construct($values)
     {
         foreach ($values as $columnName => $columnValue) {
-            if (array_search($columnName, $this->columnNames) === false && $columnName !== $this->primaryKeyName) {
-                throw new Exception('Column ' . $columnName . ' doesn\'t exist in table ' . $this->tableName);
+            if (array_search($columnName, static::$columnNames) === false && $columnName !== static::$primaryKeyName) {
+                throw new Exception('Column ' . $columnName . ' doesn\'t exist in table ' . static::$tableName);
             }
-            if ($columnName === $this->primaryKeyName) {
+            if ($columnName === static::$primaryKeyName) {
                 $this->primaryKeyValue = $columnValue;
             } else {
                 $this->values[$columnName] = $columnValue;
@@ -65,7 +65,7 @@ class Model
 
     private function buildInsertQuery()
     {
-        $sql = 'INSERT INTO ' . $this->tableName . ' (';
+        $sql = 'INSERT INTO ' . static::$tableName . ' (';
 
         // Add "`email`, `name`, ..." 
         foreach ($this->values as $columnName => $value) {
@@ -90,7 +90,7 @@ class Model
 
     private function buildUpdateQuery()
     {
-        $sql = 'UPDATE ' . $this->tableName . ' SET';
+        $sql = 'UPDATE ' . static::$tableName . ' SET';
 
         // Add " `email` = :email, `name` = :name,..." 
         foreach ($this->values as $columnName => $value) {
@@ -101,8 +101,18 @@ class Model
         $sql = rtrim($sql, ',');
 
         // Add WHERE id = ...
-        $sql .= ' WHERE ' . $this->primaryKeyName . ' = ' . $this->primaryKeyValue;
+        $sql .= ' WHERE ' . static::$primaryKeyName . ' = ' . $this->primaryKeyValue;
 
         return $sql;
+    }
+
+    public static function getRowCount()
+    {
+        $pdo = App::getInstance()->getDatabase();
+
+        $stmt = $pdo->prepare('SELECT COUNT(*) FROM ' . static::$tableName);
+        $stmt->execute();
+
+        return $stmt->fetchColumn(0);
     }
 }
