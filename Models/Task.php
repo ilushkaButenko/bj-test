@@ -10,8 +10,8 @@ use iButenko\App\App;
  */
 class Task extends Model
 {
-    protected $tableName = 'tasks';
-    protected $columnNames = [
+    protected static $tableName = 'tasks';
+    protected static $columnNames = [
         'name',
         'email',
         'task',
@@ -22,11 +22,11 @@ class Task extends Model
     {
         $pdo = App::getInstance()->getDatabase();
 
-        $sql = 'SELECT (name, email, task) FROM tasks ORDER BY id DESC LIMIT ?, ?';
+        $sql = 'SELECT * FROM tasks ORDER BY id DESC LIMIT '
+            . (($pageNum - 1) * $countPerPage) . ', ' . ($countPerPage);
         $stmt = $pdo->prepare($sql);
-        $stmt->execute([
-            ($pageNum - 1) * $countPerPage,
-            $countPerPage
-        ]);
+        $stmt->execute();
+
+        return $stmt->fetchAll();
     }
 }
