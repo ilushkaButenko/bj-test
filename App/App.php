@@ -70,4 +70,9 @@ class App
     {
         header('Location: ' . BASE_URI . $uri, true, $code);
     }
+
+    public function setStatusNotFound()
+    {
+        header('HTTP/1.0 404', true, 404);
+    }
 }
