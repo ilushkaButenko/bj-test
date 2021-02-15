@@ -128,6 +128,18 @@ class Validator
     }
     
     /**
+     * hasNoErrors
+     * 
+     * Check if validator did not find errors
+     *
+     * @return boolean
+     */
+    public function hasNoErrors()
+    {
+        return !$this->hasErrors;
+    }
+    
+    /**
      * addError
      * 
      * Add error to errors array
@@ -187,17 +199,48 @@ class Validator
      * 
      * Just looks @ between any characters
      *
-     * @return void
+     * @return Validator
      */
     public function isEmail()
     {
         return $this->isMatch('/.+@.+/', 'Email address has invalid format');
     }
-
+    
+    /**
+     * isNotEmptyString
+     *
+     * @return Validator
+     */
     public function isNotEmptyString()
     {
         if ($this->data == '') {
             $this->addError('This field is required');
+        }
+        return $this;
+    }
+    
+    /**
+     * isNumber
+     * 
+     * Check data is number
+     *
+     * @return Validator
+     */
+    public function isNumber()
+    {
+        return $this->isMatch('/[0-9]+/', 'Value must be a number');
+    }
+    
+    /**
+     * isLessOrEqualThan
+     *
+     * @param  string|int $than
+     * @return Validator
+     */
+    public function isLessOrEqualThan($than)
+    {
+        if ($this->data > $than) {
+            $this->addError('Value must be less or equal than ' . $than);
         }
         return $this;
     }
