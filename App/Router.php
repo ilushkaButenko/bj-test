@@ -18,6 +18,8 @@ class Router
     private $methodName = '';
     private $argument = '';
     private $controllerClassName = '';
+    private $clearUri = '';
+    private $parameters = '';
     
     /**
      * findRealRoute
@@ -65,6 +67,15 @@ class Router
         // Remove base uri from the uri
         $uri = substr($uri, strlen($baseUri));
 
+        // Remove get parameters
+        if (strpos($uri, '?') !== false) {
+            $this->parameters = substr($uri, strpos($uri, '?'));
+            $this->clearUri = substr($uri, 0, strpos($uri, '?'));
+            $uri = $this->clearUri;
+        } else {
+            $this->clearUri = $uri;
+        }
+
         // Get controller name from the uri
         preg_match('/\/?([^\/]+)\/?([^\/]+)?\/?([^\/]+)?/', $uri, $matches);
         $this->controllerName = isset($matches[1]) ? $matches[1] : '';
@@ -98,5 +109,22 @@ class Router
     public static function controllerNameToClassName($controllerName)
     {
         return self::controllerPrefix.ucfirst($controllerName).self::controllerPostfix;
+    }
+    
+    /**
+     * getClearUri
+     * 
+     * Get uri without get parameters
+     *
+     * @return string
+     */
+    public function getClearUri()
+    {
+        return $this->clearUri;
+    }
+
+    public function getParameters()
+    {
+        return $this->parameters;
     }
 }
