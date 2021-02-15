@@ -56,4 +56,9 @@ class App
     {
         return $this->db;
     }
+
+    public function redirect($uri, $code = 301)
+    {
+        header('Location: ' . BASE_URI . $uri, true, $code);
+    }
 }
