@@ -75,4 +75,9 @@ class App
     {
         header('HTTP/1.0 404', true, 404);
     }
+
+    public function setStatusForbidden()
+    {
+        header('HTTP/1.0 403', true, 403);
+    }
 }
