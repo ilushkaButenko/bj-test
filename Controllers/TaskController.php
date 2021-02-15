@@ -2,6 +2,7 @@
 
 namespace iButenko\Controllers;
 
+use iButenko\App\App;
 use iButenko\App\Controller;
 use iButenko\App\View;
 use iButenko\Models\Task;
@@ -12,9 +13,38 @@ use iButenko\App\Validator;
  */
 class TaskController extends Controller
 {
-    public function list()
+    public function index()
     {
-        View::render('task-list');
+        $this->page();
+    }
+
+    public function page()
+    {
+        $requestedPageNumber = 1;
+        $taskCount = Task::getRowCount();
+        $tasksPerPage = 3;
+        $pageCount = ($taskCount / 3) + 1;
+
+        $validator = Validator::init($this->arg)
+            ->isString()
+            ->isNumber()
+            ->isLessOrEqualThan($pageCount);
+
+        if ($validator->hasNoErrors()) {
+            $requestedPageNumber = $this->arg;
+        }
+
+        // For uri
+        if ($requestedPageNumber == 1 && $_SERVER['REQUEST_URI'] !== '/task') {
+            App::getInstance()->redirect('task');
+        }
+
+        View::render('task-list', [
+            'tasks' => Task::getTaskListPaginate($tasksPerPage, $requestedPageNumber),
+            'pageCount' => $pageCount,
+            'currentPage' => $requestedPageNumber,
+            'tasksPerPage' => $tasksPerPage
+        ]);
     }
 
     public function create()
