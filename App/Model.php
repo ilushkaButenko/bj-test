@@ -38,6 +38,39 @@ class Model
         }
     }
 
+    public static function delete($primaryKeyValue)
+    {
+        $pdo = App::getInstance()->getDatabase();
+
+        if (!static::hasRowWithKey($primaryKeyValue)) {
+            return false;
+        }
+
+        $stmt = $pdo->prepare('DELETE FROM ' . static::$tableName . ' WHERE '
+            . static::$primaryKeyName . ' = ?');
+        $stmt->bindValue(1, $primaryKeyValue);
+        return $stmt->execute();
+    }
+    
+    /**
+     * hasRowWithKey
+     * 
+     * Check if exists row with specified key value.
+     *
+     * @return boolean
+     */
+    public static function hasRowWithKey($primaryKeyValue)
+    {
+        $pdo = App::getInstance()->getDatabase();
+
+        $stmt = $pdo->prepare('SELECT COUNT(*) FROM ' . static::$tableName . ' WHERE ' . static::$primaryKeyName . ' = ?');
+        $stmt->bindValue(1, $primaryKeyValue);
+        $stmt->execute();
+        $count = $stmt->fetchColumn(0);
+
+        return $count == 1 ? true : false;
+    }
+
     public function save()
     {
         $pdo = App::getInstance()->getDatabase();
@@ -55,12 +88,14 @@ class Model
             $stmt->bindParam(':' . $columnName, $this->values[$columnName]);
         }
 
-        $stmt->execute();
+        $result = $stmt->execute();
 
         // Throw exception if query did not pass
         if (isset($stmt->errorInfo()[2])) {
             throw new Exception($stmt->errorInfo()[2]);
         }
+
+        return $result;
     }
 
     private function buildInsertQuery()
