@@ -11,7 +11,7 @@
       Ok!
     </div>
     <?php endif; ?>
-    <div id="nameHelp" class="form-text">Please enter only letters and start with capital letter</div>
+    <div id="nameHelp" class="form-text">Please enter only letters and <strong>start with capital letter</strong></div>
 </div>
 
 
@@ -45,5 +45,5 @@
 
 <input type="hidden" name="csrf" value="">
 <button type="submit" class="btn btn-primary">Create task</button>
-<a class="btn btn-primary" href="/task/list" role="button">Cancel</a>
+<a class="btn btn-primary" href="/task" role="button">Cancel</a>
 </form>
