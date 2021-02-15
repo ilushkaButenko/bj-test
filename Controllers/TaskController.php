@@ -89,6 +89,71 @@ class TaskController extends Controller
         header('Location: ' . BASE_URI . 'task');
     }
 
+    public function delete()
+    {
+        if (!$_SESSION['auth']) {
+            App::getInstance()->setStatusForbidden();
+            return View::render('notauthorised');
+        }
+        
+        // Check uri argument
+        $validator = Validator::init($this->arg)
+            ->isString()
+            ->isNumber();
+
+        // If bad arg
+        if ($validator->hasErrors()) {
+            App::getInstance()->setStatusNotFound();
+            return View::render('notfound');
+        }
+
+        // Database delete query
+        $result = Task::delete($this->arg);
+
+        // Success deleted
+        if ($result) {
+            return App::getInstance()->redirect('task');
+        }
+
+        // An error was during query
+        App::getInstance()->setStatusNotFound();
+        return View::render('notfound');
+    }
+
+    public function done()
+    {
+        if (!$_SESSION['auth']) {
+            App::getInstance()->setStatusForbidden();
+            return View::render('notauthorised');
+        }
+        
+        // Check uri argument
+        $validator = Validator::init($this->arg)
+            ->isString()
+            ->isNumber();
+
+        // If bad arg
+        if ($validator->hasErrors()) {
+            App::getInstance()->setStatusNotFound();
+            return View::render('notfound');
+        }
+
+        $task = new Task([
+            'id' => $this->arg,
+            'done' => 1
+        ]);
+        $result = $task->save();
+
+        // Success deleted
+        if ($result) {
+            return App::getInstance()->redirect('task');
+        }
+
+        // An error was during query
+        App::getInstance()->setStatusNotFound();
+        return View::render('notfound');
+    }
+
     private function getOrderSettingsFromRequest()
     {
         if (isset($_POST['orderBy'])) {
