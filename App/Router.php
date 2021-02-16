@@ -49,6 +49,10 @@ class Router
         if (!method_exists($this->controllerClassName, $this->methodName)) {
             $this->setNotFound();
         }
+
+        if ($this->clearUri == '') {
+            App::getInstance()->redirect('task');
+        }
     }
 
     public function setNotFound()
