@@ -1,4 +1,4 @@
-<div class="row align-items-center">
+<div class="row align-items-center border-secondary border-bottom">
     <div class="col-md-6">
         <h1>Tasks</h1>
     </div>
@@ -16,7 +16,7 @@
     
 </div>
 
-<div class="row">
+<div class="row mt-4">
     <form action="" method="POST">
         <div class="row align-items-center">
             <div class="col-md-auto">
@@ -47,7 +47,7 @@
     </form>
 </div>
 
-<div class="row">
+<div class="row mt-2">
     <table class="task-table table">
         <thead>
             <tr>
@@ -55,7 +55,7 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Task</th>
-                <th>Done</th>
+                <th>Marks</th>
                 <?php if ($auth) echo '<th></th>' ?>
             </tr>
         </thead>
@@ -67,9 +67,12 @@
                 <td><?php echo $task['email'] ?></td>
                 <td><?php echo $task['task'] ?></td>
                 <td>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" <?php echo $task['done'] == 1 ? 'checked' : '' ?> disabled>
-                    </div>
+                    <?php if ($task['done'] == 1): ?>
+                        <span class="badge bg-success">Done</span>
+                    <?php endif ?>
+                    <?php if ($task['updated'] == 1): ?>
+                        <span class="badge bg-info text-dark">Updated by admin</span>
+                    <?php endif ?>
                 </td>
                 <?php if ($auth): ?>
                 <td>
@@ -86,6 +89,21 @@
             <?php $ctr++; endforeach; endif; ?>
         </tbody>
     </table>
+    <?php if (empty($tasks)): ?>
+    <hr class="mt-2">
+    <div class="mt-5 col-md-6 offset-md-3">
+        <div class="alert alert-info" role="alert">
+            <h4 class="alert-heading">No tasks yet</h4>
+            <p>You can create task by clicking button!</p>
+            <hr>
+            <div class="row">
+                <div class="col">
+                    <a class="btn btn-primary" href="task/create" role="button">Create first task</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endif ?>
 </div>
 
 <div class="row">
