@@ -2,7 +2,6 @@
 
 namespace iButenko\App;
 
-
 /**
  * Controller
  */
@@ -21,7 +20,15 @@ class Controller
     {
         $this->arg = $arg;
     }
-
+    
+    /**
+     * filterHtmlInput
+     * 
+     * Filters given array. Don't proceeds multidimentional arrays.
+     *
+     * @param  array $input [key => value] pairs of user input.
+     * @return array same as input, but with filtered values.
+     */
     protected static function filterHtmlInput($input)
     {
         $result = [];
