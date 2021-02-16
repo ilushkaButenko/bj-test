@@ -16,6 +16,7 @@ class Task extends Model
         'email',
         'task',
         'done',
+        'updated'
     ];
 
     public static function getTaskListPaginate($countPerPage, $pageNum = 1, $orderBy = 'id', $orderDirection = 'DESC')
