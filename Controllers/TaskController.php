@@ -3,6 +3,7 @@
 namespace iButenko\Controllers;
 
 use iButenko\App\App;
+use iButenko\App\Auth;
 use iButenko\App\Controller;
 use iButenko\App\View;
 use iButenko\Models\Task;
@@ -61,16 +62,7 @@ class TaskController extends Controller
         }
 
         $filteredInput = static::filterHtmlInput($_POST);
-
-        $validator = Validator::init($filteredInput['name'], 'name')
-            ->isString()
-            ->isMatch('/[A-Z][a-z]+(\s[A-Z][a-z]+)?/', 'Invalid name');
-        
-        $validator->newValidation($filteredInput['email'], 'email')
-            ->isEmail();
-
-        $validator->newValidation($filteredInput['task'], 'task')
-            ->isNotEmptyString();
+        $validator = $this->validateCreateFormValues($filteredInput);
 
         if ($validator->hasErrors()) {
             return View::render('task-create', [
@@ -84,17 +76,106 @@ class TaskController extends Controller
             'email' => $filteredInput['email'],
             'task' => $filteredInput['task']
         ]);
-        $newTask->save();
+        $result = $newTask->save();
 
-        header('Location: ' . BASE_URI . 'task');
+        if (!$result) {
+            App::getInstance()->setStatusError();
+            View::render('servererror');
+        }
+
+        return View::render('task-edit-success', [
+            'task' => $newTask->getValues(),
+            'createMode' => true
+        ]);
+    }
+
+    public function edit()
+    {
+        Auth::check();
+
+        // Store edited task
+        if (isset($_POST['editMode']) && isset($_SESSION['taskToEdit'])) {
+
+            // Validate input
+            $filteredInput = static::filterHtmlInput($_POST);
+            $validator = $this->validateCreateFormValues($filteredInput);
+
+            if ($validator->hasErrors()) {
+                return View::render('task-create', [
+                    'oldInput' => $filteredInput,
+                    'errors' => $validator->getErrors(),
+                    'editMode' => true
+                ]);
+            }
+
+            $oldTask = Task::get($_SESSION['taskToEdit']);
+
+            // Update task
+            $task = new Task([
+                'id' => $_SESSION['taskToEdit'],
+                'name' => $filteredInput['name'],
+                'email' => $filteredInput['email'],
+                'task' => $filteredInput['task'],
+                // updated = 1 if task text has been updated, otherwise save old value
+                'updated' => ($oldTask->getValues()['task'] != $filteredInput['task']) ? 1 : $oldTask->getValues()['updated']
+            ]);
+            $task->save();
+
+            return View::render('task-edit-success', [
+                'task' => $task->getValues()
+            ]);
+        }
+
+        // Check uri argument
+        $validator = Validator::init($this->arg)->isString()->isNumber();
+
+        // If bad arg
+        if ($validator->hasErrors()) {
+            App::getInstance()->setStatusNotFound();
+            return View::render('notfound');
+        }
+
+        $task = Task::get($this->arg);
+        if (!$task) {
+            App::getInstance()->setStatusNotFound();
+            return View::render('notfound');
+        }
+
+        // Store id of task to edit
+        $_SESSION['taskToEdit'] = $task->getPrimaryKeyValue();
+
+        View::render('task-create', [
+            'oldInput' => $task->getValues(),
+            'editMode' => true
+        ]);
+    }
+    
+    /**
+     * validateCreateFormValues
+     * 
+     * Validates inputs for task create form
+     *
+     * @param $values ['name' => 'abc', ...] All form fields that need valudation
+     * @return Validator
+     */
+    private function validateCreateFormValues($values)
+    {
+        $validator = Validator::init($values['name'], 'name')
+            ->isString()
+            ->isMatch('/^[A-Z][a-z]+(\s[A-Z][a-z]+)*$/', 'Invalid name');
+        
+        $validator->newValidation($values['email'], 'email')
+            ->isEmail();
+
+        $validator->newValidation($values['task'], 'task')
+            ->isNotEmptyString();
+
+        return $validator;
     }
 
     public function delete()
     {
-        if (!$_SESSION['auth']) {
-            App::getInstance()->setStatusForbidden();
-            return View::render('notauthorised');
-        }
+        Auth::check();
         
         // Check uri argument
         $validator = Validator::init($this->arg)
@@ -122,10 +203,7 @@ class TaskController extends Controller
 
     public function done()
     {
-        if (!$_SESSION['auth']) {
-            App::getInstance()->setStatusForbidden();
-            return View::render('notauthorised');
-        }
+        Auth::check();
         
         // Check uri argument
         $validator = Validator::init($this->arg)
