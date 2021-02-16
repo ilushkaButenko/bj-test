@@ -3,7 +3,6 @@
 namespace iButenko\App;
 
 use Exception;
-use PHPUnit\TextUI\TestFileNotFoundException;
 
 /**
  * - render view and give variables
@@ -15,6 +14,14 @@ class View
     
     /**
      * render
+     * 
+     * Renders views and creates specified variables and auth info
+     * for using in views.
+     * 
+     * Render sequence:
+     * - require header
+     * - require specified view
+     * - require footer
      *
      * @param  mixed $view Name of php file in Views directory
      * @param  mixed $data Associative array 'variable name' => 'variable value'
