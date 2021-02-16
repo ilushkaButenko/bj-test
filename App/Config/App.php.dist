@@ -2,6 +2,8 @@
 
 /**
  * App config
+ *
+ * Copy this file, remove ".dist" from name and replace with your data.
  */
 
 // Base uri, use if app dont place in domain root

@@ -2,6 +2,8 @@
 
 /**
  * Database settings
+ *
+ * Copy this file, remove ".dist" from name and replace with your data.
  */
 
  define('DB_HOST', '');
