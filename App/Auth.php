@@ -2,6 +2,11 @@
 
 namespace iButenko\App;
 
+/**
+ * Auth
+ * 
+ * Provides auth operations
+ */
 class Auth
 {
     private static $expectedPassword = '$2y$10$ADPmb8BBtJp2GFI.qfaYwufEzf6Iv8KthUyUOfmfb4qoApxZNMLwW';
@@ -21,7 +26,16 @@ class Auth
         }
         return $_SESSION['auth'] === true;
     }
-
+    
+    /**
+     * login
+     * 
+     * Authentificates user and remembers it
+     *
+     * @param  mixed $login
+     * @param  mixed $password
+     * @return boolean success
+     */
     public static function login($login, $password)
     {
         if ($login === 'admin' && password_verify($password, self::$expectedPassword)) {
@@ -31,7 +45,14 @@ class Auth
         $_SESSION['auth'] = false;
         return false;
     }
-
+    
+    /**
+     * logout
+     * 
+     * Forgets user
+     *
+     * @return void
+     */
     public static function logout()
     {
         $_SESSION['auth'] = false;
