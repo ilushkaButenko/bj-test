@@ -4,7 +4,7 @@
     </div>
 
     <div class="col-md-6">
-        <a class="btn btn-primary float-end" href="/task/create" role="button">Create task</a>
+        <a class="btn btn-primary float-end" href="task/create" role="button">Create task</a>
 
         <?php if ($auth) : ?>
             <a class="btn btn-primary float-end me-2" href="logout" role="button">Logout</a>
@@ -53,18 +53,18 @@
                 <ul class="pagination float-end">
 
                     <?php if ($currentPage - 1 >= 1) : ?>
-                        <li class="page-item"><a class="page-link" href="<?php echo $currentPage == 2 ? '/task' : '/task/page/' . ($currentPage - 1) ?>">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="<?php echo $currentPage == 2 ? '/task' : 'task/page/' . ($currentPage - 1) ?>">Previous</a></li>
                     <?php else : ?>
                         <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a></li>
                     <?php endif ?>
 
-                    <li class="page-item <?php echo $currentPage == 1 ? 'active' : '' ?>"><a class="page-link" href="/task">1</a></li>
+                    <li class="page-item <?php echo $currentPage == 1 ? 'active' : '' ?>"><a class="page-link" href="task">1</a></li>
                     <?php for ($i = 2; $i <= $pageCount; $i++) : ?>
-                        <li class="page-item <?php echo $currentPage == $i ? 'active' : '' ?>"><a class="page-link" href="/task/page/<?php echo $i ?>"><?php echo $i ?></a></li>
+                        <li class="page-item <?php echo $currentPage == $i ? 'active' : '' ?>"><a class="page-link" href="task/page/<?php echo $i ?>"><?php echo $i ?></a></li>
                     <?php endfor ?>
 
                     <?php if ($currentPage + 1 <= $pageCount) : ?>
-                        <li class="page-item"><a class="page-link" href="/task/page/<?php echo $currentPage + 1 ?>">Next</a></li>
+                        <li class="page-item"><a class="page-link" href="task/page/<?php echo $currentPage + 1 ?>">Next</a></li>
                     <?php else : ?>
                         <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a></li>
                     <?php endif ?>

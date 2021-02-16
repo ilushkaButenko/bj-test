@@ -59,6 +59,6 @@
       <button type="submit" class="btn btn-primary">Create task</button>
     <?php endif ?>
 
-    <a class="btn btn-primary" href="/task" role="button">Cancel</a>
+    <a class="btn btn-primary" href="task" role="button">Cancel</a>
   </form>
 </div>
