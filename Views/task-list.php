@@ -17,37 +17,64 @@
 </div>
 
 <div class="row mt-4">
-    <form action="" method="POST">
-        <div class="row align-items-center">
-            <div class="col-md-auto">
-                <label for="orderBy" class="form-label col-md-auto">Order by:</label>
-            </div>
-            <div class="col-md-auto">
-                <select id="orderBy" name="orderBy" class="form-select" aria-label="Default select example">
-                    <option value="id" <?php echo $orderBy == 'id' ? 'selected' : '' ?>>default</option>
-                    <option value="name" <?php echo $orderBy == 'name' ? 'selected' : '' ?>>Name</option>
-                    <option value="email" <?php echo $orderBy == 'email' ? 'selected' : '' ?>>Email</option>
-                    <option value="done" <?php echo $orderBy == 'done' ? 'selected' : '' ?>>Done</option>
-                </select>
-            </div>
+    <div class="col-md-6">
+        <form action="" method="POST">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <label for="orderBy" class="col-form-label">Order by:</label>
+                </div>
+                <div class="col-auto">
+                    <select id="orderBy" name="orderBy" class="form-select form-select-sm" aria-label="Default select example">
+                        <option value="id" <?php echo $orderBy == 'id' ? 'selected' : '' ?>>default</option>
+                        <option value="name" <?php echo $orderBy == 'name' ? 'selected' : '' ?>>Name</option>
+                        <option value="email" <?php echo $orderBy == 'email' ? 'selected' : '' ?>>Email</option>
+                        <option value="done" <?php echo $orderBy == 'done' ? 'selected' : '' ?>>Done</option>
+                    </select>
+                </div>
 
-            <div class="col-md-auto">
-                <label for="orderDirection" class="form-label">Direction:</label>
+                <div class="col-auto">
+                    <label for="orderDirection" class="col-form-label">Direction:</label>
+                </div>
+                <div class="col-auto">
+                    <select id="orderDirection" name="orderDirection" class="form-select form-select-sm" aria-label="Default select example">
+                        <option value="asc" <?php echo $orderDirection == 'asc' ? 'selected' : '' ?>>Asc</option>
+                        <option value="desc" <?php echo $orderDirection == 'desc' ? 'selected' : '' ?>>Desc</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary btn-sm">Apply</button>
+                </div>
             </div>
-            <div class="col-md-auto">
-                <select id="orderDirection" name="orderDirection" class="form-select" aria-label="Default select example">
-                    <option value="asc" <?php echo $orderDirection == 'asc' ? 'selected' : '' ?>>Asc</option>
-                    <option value="desc" <?php echo $orderDirection == 'desc' ? 'selected' : '' ?>>Desc</option>
-                </select>
-            </div>
-            <div class="col-md-auto">
-                <button type="submit" class="btn btn-primary">Apply</button>
-            </div>
-        </div>
-    </form>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <?php if ($pageCount > 1) : ?>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination float-end">
+
+                    <?php if ($currentPage - 1 >= 1) : ?>
+                        <li class="page-item"><a class="page-link" href="<?php echo $currentPage == 2 ? '/task' : '/task/page/' . ($currentPage - 1) ?>">Previous</a></li>
+                    <?php else : ?>
+                        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a></li>
+                    <?php endif ?>
+
+                    <li class="page-item <?php echo $currentPage == 1 ? 'active' : '' ?>"><a class="page-link" href="/task">1</a></li>
+                    <?php for ($i = 2; $i <= $pageCount; $i++) : ?>
+                        <li class="page-item <?php echo $currentPage == $i ? 'active' : '' ?>"><a class="page-link" href="/task/page/<?php echo $i ?>"><?php echo $i ?></a></li>
+                    <?php endfor ?>
+
+                    <?php if ($currentPage + 1 <= $pageCount) : ?>
+                        <li class="page-item"><a class="page-link" href="/task/page/<?php echo $currentPage + 1 ?>">Next</a></li>
+                    <?php else : ?>
+                        <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a></li>
+                    <?php endif ?>
+                </ul>
+            </nav>
+        <?php endif ?>
+    </div>
 </div>
 
-<div class="row mt-2">
+<div class="row">
     <table class="task-table table">
         <thead>
             <tr>
@@ -106,31 +133,5 @@
                 </div>
             </div>
         </div>
-    <?php endif ?>
-</div>
-
-<div class="row">
-    <?php if ($pageCount > 1) : ?>
-        <nav aria-label="Page navigation example">
-            <ul class="pagination float-end">
-
-                <?php if ($currentPage - 1 >= 1) : ?>
-                    <li class="page-item"><a class="page-link" href="<?php echo $currentPage == 2 ? '/task' : '/task/page/' . ($currentPage - 1) ?>">Previous</a></li>
-                <?php else : ?>
-                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a></li>
-                <?php endif ?>
-
-                <li class="page-item <?php echo $currentPage == 1 ? 'active' : '' ?>"><a class="page-link" href="/task">1</a></li>
-                <?php for ($i = 2; $i <= $pageCount; $i++) : ?>
-                    <li class="page-item <?php echo $currentPage == $i ? 'active' : '' ?>"><a class="page-link" href="/task/page/<?php echo $i ?>"><?php echo $i ?></a></li>
-                <?php endfor ?>
-
-                <?php if ($currentPage + 1 <= $pageCount) : ?>
-                    <li class="page-item"><a class="page-link" href="/task/page/<?php echo $currentPage + 1 ?>">Next</a></li>
-                <?php else : ?>
-                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a></li>
-                <?php endif ?>
-            </ul>
-        </nav>
     <?php endif ?>
 </div>
