@@ -22,7 +22,7 @@ class Model
     protected $values = [];
 
     /**
-     * @param array $values field values
+     * @param array $values field values [column-name => value, ...]
      */
     public function __construct($values)
     {
@@ -64,7 +64,15 @@ class Model
 
         return $modelInstance;
     }
-
+    
+    /**
+     * delete
+     * 
+     * Deletes entity by primary key.
+     *
+     * @param  mixed $primaryKeyValue
+     * @return boolean success
+     */
     public static function delete($primaryKeyValue)
     {
         $pdo = App::getInstance()->getDatabase();
@@ -97,7 +105,15 @@ class Model
 
         return $count == 1 ? true : false;
     }
-
+    
+    /**
+     * save
+     * 
+     * Creates new entity if primary key value is not specified.
+     * Otherwise updates existing entity.
+     *
+     * @return boolean
+     */
     public function save()
     {
         $pdo = App::getInstance()->getDatabase();
@@ -124,7 +140,12 @@ class Model
 
         return $result;
     }
-
+    
+    /**
+     * buildInsertQuery
+     *
+     * @return string query
+     */
     private function buildInsertQuery()
     {
         $sql = 'INSERT INTO ' . static::$tableName . ' (';
@@ -149,7 +170,12 @@ class Model
 
         return $sql;
     }
-
+    
+    /**
+     * buildUpdateQuery
+     *
+     * @return string query
+     */
     private function buildUpdateQuery()
     {
         $sql = 'UPDATE ' . static::$tableName . ' SET';
@@ -167,7 +193,14 @@ class Model
 
         return $sql;
     }
-
+    
+    /**
+     * getRowCount
+     * 
+     * Gets count of entities in the table.
+     *
+     * @return string entities count
+     */
     public static function getRowCount()
     {
         $pdo = App::getInstance()->getDatabase();
