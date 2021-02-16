@@ -1,7 +1,7 @@
 <div class="col-md-6 offset-md-3">
-  <?php if ($editMode): ?>
+  <?php if ($editMode) : ?>
     <h1>Edit task</h1>
-  <?php else: ?>
+  <?php else : ?>
     <h1>Create task</h1>
   <?php endif; ?>
   <form method="POST" action="task/<?php echo $editMode ? 'edit' : 'create' ?>" class="needs-validation" novalidate>
@@ -55,7 +55,7 @@
     <?php if ($editMode) : ?>
       <input type="hidden" name="editMode" value="true">
       <button type="submit" class="btn btn-primary">Save task</button>
-    <?php else: ?>
+    <?php else : ?>
       <button type="submit" class="btn btn-primary">Create task</button>
     <?php endif ?>
 

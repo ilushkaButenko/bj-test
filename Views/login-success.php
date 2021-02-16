@@ -3,9 +3,9 @@
   <p>Now you can continue working with task list as administrator. You can edit tasks, mark them done and delete.</p>
   <hr>
   <div class="row">
-  <div class="col">
-    <a class="btn btn-primary" href="/task" role="button">Continue</a>
-</div>
-    
+    <div class="col">
+      <a class="btn btn-primary" href="/task" role="button">Continue</a>
+    </div>
+
   </div>
 </div>
