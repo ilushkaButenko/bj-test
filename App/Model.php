@@ -37,6 +37,33 @@ class Model
             }
         }
     }
+    
+    /**
+     * get
+     * 
+     * Creates model instance that represents real row in database table
+     * selected by primary key value.
+     *
+     * @param  mixed $primaryKeyValue
+     * @return static|boolean instance of child model or false if not found
+     */
+    public static function get($primaryKeyValue)
+    {
+        $pdo = App::getInstance()->getDatabase();
+
+        $stmt = $pdo->prepare('SELECT * FROM ' . static::$tableName . ' WHERE ' . static::$primaryKeyName . ' = ?');
+        $stmt->bindValue(1, $primaryKeyValue);
+        $stmt->execute();
+        $entity = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if (!$entity) {
+            return false;
+        }
+
+        $modelInstance = new static($entity);
+
+        return $modelInstance;
+    }
 
     public static function delete($primaryKeyValue)
     {
@@ -149,5 +176,27 @@ class Model
         $stmt->execute();
 
         return $stmt->fetchColumn(0);
+    }
+    
+    /**
+     * getValues
+     * 
+     * Return field values
+     *
+     * @return array
+     */
+    public function getValues()
+    {
+        return $this->values;
+    }
+    
+    /**
+     * getPrimaryKeyValue
+     *
+     * @return mixed
+     */
+    public function getPrimaryKeyValue()
+    {
+        return $this->primaryKeyValue;
     }
 }
