@@ -3,11 +3,19 @@
 namespace iButenko\App\Boot;
 
 /**
- * - load project
+ * Autoloader
+ * 
+ * Custom autoloader for project.
  */
-
 class Autoloader
-{
+{    
+    /**
+     * autoload
+     * 
+     * Loads all needle files.
+     *
+     * @return void
+     */
     public static function autoload()
     {
         // Load config
@@ -22,12 +30,28 @@ class Autoloader
             self::loadAllPhpFromDirectory($path);
         }
     }
-
+    
+    /**
+     * isPhpFile
+     * 
+     * Check by filename.
+     *
+     * @param  mixed $fileName
+     * @return void
+     */
     public static function isPhpFile($fileName)
     {
         return preg_match('/^.+\.php$/', $fileName) === 0 ? false : true;
     }
-
+    
+    /**
+     * loadAllPhpFromDirectory
+     * 
+     * Requires php files from directory. 
+     *
+     * @param  string $directoryPath
+     * @return void
+     */
     public static function loadAllPhpFromDirectory($directoryPath)
     {
         $files = scandir($directoryPath);
@@ -38,7 +62,13 @@ class Autoloader
             }
         }
     }
-
+    
+    /**
+     * endWithSlash
+     *
+     * @param  mixed $directoryPath
+     * @return void
+     */
     public static function endWithSlash($directoryPath)
     {
         if ($directoryPath[strlen($directoryPath)-1] !== DS) {
