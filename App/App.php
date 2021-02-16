@@ -80,4 +80,9 @@ class App
     {
         header('HTTP/1.0 403', true, 403);
     }
+
+    public function setStatusError()
+    {
+        header('HTTP/1.0 500', true, 500);
+    }
 }
