@@ -5,13 +5,13 @@ namespace iButenko\Controllers;
 use iButenko\App\Controller;
 use iButenko\App\Validator;
 use iButenko\App\View;
+use iButenko\App\Auth;
 
 /**
  * LoginController
  */
 class LoginController extends Controller
 {
-    private $expectedPassword = '$2y$10$ADPmb8BBtJp2GFI.qfaYwufEzf6Iv8KthUyUOfmfb4qoApxZNMLwW';
     public function index()
     {
         if (empty($_POST)) {
@@ -34,8 +34,7 @@ class LoginController extends Controller
         }
 
         // Auth
-        if ($filteredInput['login'] === 'admin' && password_verify($filteredInput['password'], $this->expectedPassword)) {
-            $_SESSION['auth'] = true;
+        if (Auth::login($filteredInput['login'], $filteredInput['password'])) {
             return View::render('login-success');
         }
 
