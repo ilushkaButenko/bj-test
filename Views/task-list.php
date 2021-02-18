@@ -53,7 +53,7 @@
                 <ul class="pagination float-end">
 
                     <?php if ($currentPage - 1 >= 1) : ?>
-                        <li class="page-item"><a class="page-link" href="<?php echo $currentPage == 2 ? '/task' : 'task/page/' . ($currentPage - 1) ?>">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="<?php echo $currentPage == 2 ? 'task' : 'task/page/' . ($currentPage - 1) ?>">Previous</a></li>
                     <?php else : ?>
                         <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a></li>
                     <?php endif ?>
