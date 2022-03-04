@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col">
             <a class="btn btn-primary" href="login" role="button">Login</a>
-            <a class="btn btn-primary" href="task" role="button">Cancel</a>
+            <a class="btn btn-primary" href="/" role="button">Cancel</a>
         </div>
     </div>
 </div>

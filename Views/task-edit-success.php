@@ -29,7 +29,7 @@
     <hr>
     <div class="row">
         <div class="col">
-            <a class="btn btn-primary" href="task" role="button">Continue</a>
+            <a class="btn btn-primary" href="/" role="button">Continue</a>
         </div>
     </div>
 </div>
