@@ -2,6 +2,8 @@
 
 namespace iButenko\App;
 
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
+
 /**
  * Router
  * 
@@ -17,6 +19,7 @@ class Router
     private $controllerName = '';
     private $methodName = '';
     private $argument = '';
+    private $arguments = [];
     private $controllerClassName = '';
     private $clearUri = '';
     private $parameters = '';
@@ -27,14 +30,18 @@ class Router
      * Finds out controller class and method. If controller or method
      * doesn't exist it looks for suitable controller and method replace.
      *
-     * @param  mixed $uri
+     * @param  mixed $fullUri
      * @param  mixed $baseUri
      * @return void
      */
-    public function findRealRoute($uri, $baseUri)
+    public function findRealRoute($fullUri, $baseUri)
     {
+        $this->parseUri($fullUri, $baseUri);
+
         // Parse uri
-        $this->parseUri($uri, $baseUri);
+        if (!$this->getDefinedRoute()) {
+            // $this->getAutoRoute();
+        }
 
         $this->controllerClassName = self::controllerNameToClassName($this->controllerName);
 
@@ -49,10 +56,6 @@ class Router
         if (!method_exists($this->controllerClassName, $this->methodName)) {
             $this->setNotFound();
         }
-
-        if ($this->clearUri == '') {
-            App::getInstance()->redirect('task');
-        }
     }
 
     public function setNotFound()
@@ -62,26 +65,15 @@ class Router
         $this->controllerClassName = self::controllerNameToClassName($this->controllerName);
     }
 
-    public function parseUri($uri, $baseUri)
+    /**
+     * Finds controller name, method and argument from uri.
+     * 
+     * Default routing method.
+     */
+    public function getAutoRoute()
     {
-        // Add slash if there is no slash
-        $baseUri = $baseUri[0] === '/' ? $baseUri : '/'.$baseUri;
-        $uri = $uri[0] === '/' ? $uri : '/'.$uri;
-
-        // Remove base uri from the uri
-        $uri = substr($uri, strlen($baseUri));
-
-        // Remove get parameters
-        if (strpos($uri, '?') !== false) {
-            $this->parameters = substr($uri, strpos($uri, '?'));
-            $this->clearUri = substr($uri, 0, strpos($uri, '?'));
-            $uri = $this->clearUri;
-        } else {
-            $this->clearUri = $uri;
-        }
-
         // Get controller name from the uri
-        preg_match('/\/?([^\/]+)\/?([^\/]+)?\/?([^\/]+)?/', $uri, $matches);
+        preg_match('/\/?([^\/]+)\/?([^\/]+)?\/?([^\/]+)?/', $this->clearUri, $matches);
         $this->controllerName = isset($matches[1]) ? $matches[1] : '';
         $this->methodName = isset($matches[2]) ? $matches[2] : '';
         $this->argument = isset($matches[3]) ? $matches[3] : '';
@@ -130,5 +122,63 @@ class Router
     public function getParameters()
     {
         return $this->parameters;
+    }
+
+    /**
+     * Finds out which defined route is match.
+     */
+    public function getDefinedRoute()
+    {
+        $routes = require(RESOURCE_DIRECTORY . '/Routes.php');
+
+        foreach ($routes as $route) {
+            if ($route->isMatch($this->clearUri)) {
+                $this->controllerName = $route->getControllerName();
+                $this->methodName = $route->getMethodName();
+                $this->argument = $route->getArguments()[0];
+                $this->arguments = $route->getArguments();
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Removes base uri substring from uri
+     * 
+     * @param string $fullUri
+     * @param string $baseUri
+     */
+    public static function removeBaseUri($fullUri, $baseUri)
+    {
+        // Add slash if there is no slash
+        $baseUri = $baseUri[0] === '/' ? $baseUri : '/'.$baseUri;
+        $uri = $fullUri[0] === '/' ? $fullUri : '/'.$fullUri;
+
+        // Remove base uri from the uri
+        $uri = substr($uri, strlen($baseUri));
+
+        return $uri;
+    }
+
+    /**
+     * Separate parameters and set clear uri.
+     * 
+     * @param string $fullUri
+     * @param string $baseUri
+     */
+    public function parseUri($fullUri, $baseUri)
+    {
+        $uri = self::removeBaseUri($fullUri, $baseUri);
+
+        // Remove get parameters
+        if (strpos($uri, '?') !== false) {
+            $this->parameters = substr($uri, strpos($uri, '?'));
+            $this->clearUri = substr($uri, 0, strpos($uri, '?'));
+        } else {
+            $this->clearUri = $uri;
+        }
     }
 }

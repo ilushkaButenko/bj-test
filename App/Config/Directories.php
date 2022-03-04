@@ -16,3 +16,6 @@ define('MODELS_DIR', ROOT_DIR.DS.'Models');
 
 // Path to views directory
 define('VIEWS_DIR', ROOT_DIR.DS.'Views');
+
+// Path to resources directory
+define('RESOURCE_DIRECTORY', ROOT_DIR.DS.'Resources');

@@ -36,8 +36,8 @@ class TaskController extends Controller
         }
 
         // Redirect to /task if need 1st page
-        if ($requestedPageNumber == 1 && App::getInstance()->getRouter()->getClearUri() !== 'task') {
-            App::getInstance()->redirect('task');
+        if ($requestedPageNumber == 1 && App::getInstance()->getRouter()->getClearUri() === 'tasks/1') {
+            App::getInstance()->redirect('/');
         }
 
         $this->getOrderSettingsFromRequest();
@@ -193,7 +193,7 @@ class TaskController extends Controller
 
         // Success deleted
         if ($result) {
-            return App::getInstance()->redirect('task');
+            return App::getInstance()->redirect('/');
         }
 
         // An error was during query
@@ -224,7 +224,7 @@ class TaskController extends Controller
 
         // Success deleted
         if ($result) {
-            return App::getInstance()->redirect('task');
+            return App::getInstance()->redirect('/');
         }
 
         // An error was during query
@@ -252,5 +252,10 @@ class TaskController extends Controller
 
             $_SESSION['orderDirection'] = $sortArgumentsErrors['orderDirection'] === false ? $_POST['orderDirection'] : 'DESC';
         }
+    }
+
+    public function testroute()
+    {
+        return 'Test Route';
     }
 }

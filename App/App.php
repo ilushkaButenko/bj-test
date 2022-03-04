@@ -94,7 +94,8 @@ class App
      */
     public function redirect($uri, $code = 301)
     {
-        header('Location: ' . BASE_URI . $uri, true, $code);
+        $uriTrimmed = trim($uri, '/');
+        header('Location: ' . BASE_URI . $uriTrimmed, true, $code);
     }
     
     /**
