@@ -5,5 +5,5 @@
  */
 function url($relativeUrl)
 {
-    return '/' . implode(DS, [trim(BASE_URI, '/'), ltrim($relativeUrl, '/')]);
+    return '/' . ltrim(implode('/', [trim(BASE_URI, '/'), ltrim($relativeUrl, '/')]), '/');
 }
