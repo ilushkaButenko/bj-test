@@ -26,6 +26,7 @@ class Autoloader
             APP_DIR,
             CONTROLLERS_DIR,
             MODELS_DIR,
+            HELPER_DIR,
         ] as $path) {
             self::loadAllPhpFromDirectory($path);
         }

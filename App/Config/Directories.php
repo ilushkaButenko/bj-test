@@ -19,3 +19,6 @@ define('VIEWS_DIR', ROOT_DIR.DS.'Views');
 
 // Path to resources directory
 define('RESOURCE_DIRECTORY', ROOT_DIR.DS.'Resources');
+
+// Path to helpers dir
+define('HELPER_DIR', ROOT_DIR.DS.'Helper');

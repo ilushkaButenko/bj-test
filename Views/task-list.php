@@ -4,12 +4,12 @@
     </div>
 
     <div class="col-md-6">
-        <a class="btn btn-primary float-end" href="task/create" role="button">Create task</a>
+        <a class="btn btn-primary float-end" href="<?php echo url('task/create') ?>" role="button">Create task</a>
 
         <?php if ($auth) : ?>
-            <a class="btn btn-primary float-end me-2" href="logout" role="button">Logout</a>
+            <a class="btn btn-primary float-end me-2" href="<?php echo url('logout') ?>" role="button">Logout</a>
         <?php else : ?>
-            <a class="btn btn-primary float-end me-2" href="login" role="button">Login as administrator</a>
+            <a class="btn btn-primary float-end me-2" href="<?php echo url('login') ?>" role="button">Login as administrator</a>
         <?php endif ?>
 
     </div>
@@ -53,18 +53,18 @@
                 <ul class="pagination float-end">
 
                     <?php if ($currentPage - 1 >= 1) : ?>
-                        <li class="page-item"><a class="page-link" href="<?php echo $currentPage == 2 ? '/' : 'tasks/' . ($currentPage - 1) ?>">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="<?php echo url($currentPage == 2 ? '/' : 'tasks/' . ($currentPage - 1)) ?>">Previous</a></li>
                     <?php else : ?>
                         <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a></li>
                     <?php endif ?>
 
-                    <li class="page-item <?php echo $currentPage == 1 ? 'active' : '' ?>"><a class="page-link" href="/">1</a></li>
+                    <li class="page-item <?php echo $currentPage == 1 ? 'active' : '' ?>"><a class="page-link" href="<?php echo url('/') ?>">1</a></li>
                     <?php for ($i = 2; $i <= $pageCount; $i++) : ?>
-                        <li class="page-item <?php echo $currentPage == $i ? 'active' : '' ?>"><a class="page-link" href="tasks/<?php echo $i ?>"><?php echo $i ?></a></li>
+                        <li class="page-item <?php echo $currentPage == $i ? 'active' : '' ?>"><a class="page-link" href="<?php echo url('tasks/' . $i) ?>"><?php echo $i ?></a></li>
                     <?php endfor ?>
 
                     <?php if ($currentPage + 1 <= $pageCount) : ?>
-                        <li class="page-item"><a class="page-link" href="tasks/<?php echo $currentPage + 1 ?>">Next</a></li>
+                        <li class="page-item"><a class="page-link" href="<?php echo url('tasks/' . $currentPage + 1) ?>">Next</a></li>
                     <?php else : ?>
                         <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a></li>
                     <?php endif ?>
@@ -104,12 +104,12 @@
                         </td>
                         <?php if ($auth) : ?>
                             <td>
-                                <a class="btn btn-primary btn-sm" href="task/edit/<?php echo $task['id'] ?>" role="button">Edit</a>
-                                <a class="btn btn-danger btn-sm" href="task/delete/<?php echo $task['id'] ?>" role="button">Delete</a>
+                                <a class="btn btn-primary btn-sm" href="<?php echo url('task/edit/' . $task['id']) ?>" role="button">Edit</a>
+                                <a class="btn btn-danger btn-sm" href="<?php echo url('task/delete/' . $task['id']) ?>" role="button">Delete</a>
                                 <?php if ($task['done'] == 1) : ?>
-                                    <a class="btn btn-success btn-sm disabled" href="task/done/<?php echo $task['id'] ?>" role="button" aria-disabled="true">Mark as done</a>
+                                    <a class="btn btn-success btn-sm disabled" href="<?php echo url('task/done/' . $task['id']) ?>" role="button" aria-disabled="true">Mark as done</a>
                                 <?php else : ?>
-                                    <a class="btn btn-success btn-sm" href="task/done/<?php echo $task['id'] ?>" role="button">Mark as done</a>
+                                    <a class="btn btn-success btn-sm" href="<?php echo url('task/done/' . $task['id']) ?>" role="button">Mark as done</a>
                                 <?php endif ?>
                             </td>
                         <?php endif ?>
@@ -128,7 +128,7 @@
                 <hr>
                 <div class="row">
                     <div class="col">
-                        <a class="btn btn-primary" href="task/create" role="button">Create first task</a>
+                        <a class="btn btn-primary" href="<?php echo url('task/create') ?>" role="button">Create first task</a>
                     </div>
                 </div>
             </div>

@@ -41,6 +41,6 @@
 
         <input type="hidden" name="csrf" value="">
         <button type="submit" class="btn btn-primary">Login</button>
-        <a class="btn btn-primary" href="/" role="button">Cancel</a>
+        <a class="btn btn-primary" href="<?php echo url('/') ?>" role="button">Cancel</a>
     </form>
 </div>

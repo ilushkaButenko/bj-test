@@ -4,8 +4,8 @@
     <hr>
     <div class="row">
         <div class="col">
-            <a class="btn btn-primary" href="login" role="button">Login</a>
-            <a class="btn btn-primary" href="/" role="button">Cancel</a>
+            <a class="btn btn-primary" href="<?php echo url('login') ?>" role="button">Login</a>
+            <a class="btn btn-primary" href="<?php echo url('/') ?>" role="button">Cancel</a>
         </div>
     </div>
 </div>
