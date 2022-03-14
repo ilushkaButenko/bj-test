@@ -64,7 +64,7 @@
                     <?php endfor ?>
 
                     <?php if ($currentPage + 1 <= $pageCount) : ?>
-                        <li class="page-item"><a class="page-link" href="<?php echo url('tasks/' . $currentPage + 1) ?>">Next</a></li>
+                        <li class="page-item"><a class="page-link" href="<?php echo url('tasks/' . ($currentPage + 1)) ?>">Next</a></li>
                     <?php else : ?>
                         <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a></li>
                     <?php endif ?>
