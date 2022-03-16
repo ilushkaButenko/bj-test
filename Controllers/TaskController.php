@@ -46,7 +46,7 @@ class TaskController extends Controller
         $orderDirection = isset($_SESSION['orderDirection']) ? $_SESSION['orderDirection'] : 'desc';
 
         View::render('task-list', [
-            'tasks' => Task::getTaskListPaginate($tasksPerPage, $requestedPageNumber, $orderBy, $orderDirection),
+            'tasks' => Task::getListPaginate($tasksPerPage, $requestedPageNumber, $orderBy, $orderDirection),
             'pageCount' => $pageCount,
             'currentPage' => $requestedPageNumber,
             'tasksPerPage' => $tasksPerPage,

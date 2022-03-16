@@ -232,4 +232,27 @@ class Model
     {
         return $this->primaryKeyValue;
     }
+
+    /**
+     * getListPaginate
+     * 
+     * Gets part of table content by dividing to pages.
+     *
+     * @param  mixed $countPerPage
+     * @param  mixed $pageNum
+     * @param  mixed $orderBy
+     * @param  mixed $orderDirection
+     * @return array table content
+     */
+    public static function getListPaginate($countPerPage, $pageNum = 1, $orderBy = 'id', $orderDirection = 'DESC')
+    {
+        $pdo = App::getInstance()->getDatabase();
+
+        $sql = 'SELECT * FROM ' . static::$tableName . ' ORDER BY ' . $orderBy . ' ' . $orderDirection . ' LIMIT '
+            . (($pageNum - 1) * $countPerPage) . ', ' . ($countPerPage);
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
 }
