@@ -253,9 +253,4 @@ class TaskController extends Controller
             $_SESSION['orderDirection'] = $sortArgumentsErrors['orderDirection'] === false ? $_POST['orderDirection'] : 'DESC';
         }
     }
-
-    public function testroute()
-    {
-        return 'Test Route';
-    }
 }
