@@ -2,6 +2,8 @@
 
 namespace iButenko\App;
 
+use iButenko\Controllers\TaskController;
+
 /**
  * Auth
  * 
@@ -21,7 +23,9 @@ class Auth
     {
         if ($showError && $_SESSION['auth'] !== true) {
             App::getInstance()->setStatusForbidden();
-            View::render('notauthorised');
+            View::render('notauthorised', [
+                'tasksUrl' => TaskController::getLastPageUrl(),
+            ]);
             exit();
         }
         return $_SESSION['auth'] === true;

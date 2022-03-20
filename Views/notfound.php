@@ -4,7 +4,7 @@
     <hr>
     <div class="row">
         <div class="col">
-            <a class="btn btn-primary" href="<?php echo url('/') ?>" role="button">Main page</a>
+            <a class="btn btn-primary" href="<?php echo $tasksUrl ?? url('/') ?>" role="button">Main page</a>
         </div>
     </div>
 </div>

@@ -15,6 +15,8 @@ class NotFoundController extends Controller
     {
         App::getInstance()->setStatusNotFound();
 
-        View::render('notfound');
+        View::render('notfound', [
+            'tasksUrl' => TaskController::getLastPageUrl(),
+        ]);
     }
 }

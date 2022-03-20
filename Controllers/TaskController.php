@@ -24,15 +24,23 @@ class TaskController extends Controller
         $requestedPageNumber = 1;
         $taskCount = Task::getRowCount();
         $tasksPerPage = 3;
-        $pageCount = ($taskCount / $tasksPerPage) + (($taskCount % $tasksPerPage) ? 1 : 0);
+        $pageCount = intdiv($taskCount, $tasksPerPage) + (($taskCount % $tasksPerPage) ? 1 : 0);
 
-        $validator = Validator::init($this->arg)
-            ->isString()
-            ->isNumber()
-            ->isLessOrEqualThan($pageCount);
+        if (App::getInstance()->getRouter()->getClearUri() !== '') {
+            $validator = Validator::init($this->arg)
+                ->isString()
+                ->isNumber()
+                ->isLessOrEqualThan($pageCount);
 
-        if ($validator->hasNoErrors()) {
-            $requestedPageNumber = $this->arg;
+            if ($validator->hasNoErrors()) {
+                $requestedPageNumber = $this->arg;
+                $_SESSION['tasksPageNumber'] = $requestedPageNumber;
+            } else {
+                App::getInstance()->redirect('tasks/' . $pageCount);
+                return;
+            }
+        } else {
+            $_SESSION['tasksPageNumber'] = 1;
         }
 
         // Redirect to /task if need 1st page
@@ -58,7 +66,9 @@ class TaskController extends Controller
     public function create()
     {
         if (empty($_POST)) {
-            return View::render('task-create');
+            return View::render('task-create', [
+                'tasksUrl' => static::getLastPageUrl(),
+            ]);
         }
 
         $filteredInput = static::filterHtmlInput($_POST);
@@ -67,7 +77,8 @@ class TaskController extends Controller
         if ($validator->hasErrors()) {
             return View::render('task-create', [
                 'oldInput' => $filteredInput,
-                'errors' => $validator->getErrors()
+                'errors' => $validator->getErrors(),
+                'tasksUrl' => static::getLastPageUrl(),
             ]);
         }
 
@@ -80,12 +91,15 @@ class TaskController extends Controller
 
         if (!$result) {
             App::getInstance()->setStatusError();
-            View::render('servererror');
+            View::render('servererror', [
+                'tasksUrl' => static::getLastPageUrl(),
+            ]);
         }
 
         return View::render('task-edit-success', [
             'task' => $newTask->getValues(),
-            'createMode' => true
+            'createMode' => true,
+            'tasksUrl' => static::getLastPageUrl(),
         ]);
     }
 
@@ -104,7 +118,8 @@ class TaskController extends Controller
                 return View::render('task-create', [
                     'oldInput' => $filteredInput,
                     'errors' => $validator->getErrors(),
-                    'editMode' => true
+                    'editMode' => true,
+                    'tasksUrl' => static::getLastPageUrl(),
                 ]);
             }
 
@@ -122,7 +137,8 @@ class TaskController extends Controller
             $task->save();
 
             return View::render('task-edit-success', [
-                'task' => $task->getValues()
+                'task' => $task->getValues(),
+                'tasksUrl' => static::getLastPageUrl(),
             ]);
         }
 
@@ -146,7 +162,8 @@ class TaskController extends Controller
 
         View::render('task-create', [
             'oldInput' => $task->getValues(),
-            'editMode' => true
+            'editMode' => true,
+            'tasksUrl' => static::getLastPageUrl(),
         ]);
     }
     
@@ -193,12 +210,16 @@ class TaskController extends Controller
 
         // Success deleted
         if ($result) {
-            return App::getInstance()->redirect('/');
+            return App::getInstance()->redirect(
+                static::getLastPageUrl()
+            );
         }
 
         // An error was during query
         App::getInstance()->setStatusNotFound();
-        return View::render('notfound');
+        return View::render('notfound', [
+            'tasksUrl' => static::getLastPageUrl(),
+        ]);
     }
 
     public function done()
@@ -222,9 +243,11 @@ class TaskController extends Controller
         ]);
         $result = $task->save();
 
-        // Success deleted
+        // Success marked
         if ($result) {
-            return App::getInstance()->redirect('/');
+            return App::getInstance()->redirect(
+                static::getLastPageUrl()
+            );
         }
 
         // An error was during query
@@ -252,5 +275,14 @@ class TaskController extends Controller
 
             $_SESSION['orderDirection'] = $sortArgumentsErrors['orderDirection'] === false ? $_POST['orderDirection'] : 'DESC';
         }
+    }
+
+    public static function getLastPageUrl()
+    {
+        $lastPageNumber = $_SESSION['tasksPageNumber'] ?? 1;
+        if ($lastPageNumber > 1) {
+            return url("tasks/{$lastPageNumber}");
+        }
+        return url('/');
     }
 }

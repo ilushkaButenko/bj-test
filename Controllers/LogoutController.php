@@ -17,6 +17,8 @@ class LogoutController extends Controller
         Auth::check();
 
         Auth::logout();
-        View::render('logout-success');
+        View::render('logout-success', [
+            'tasksUrl' => TaskController::getLastPageUrl(),
+        ]);
     }
 }
