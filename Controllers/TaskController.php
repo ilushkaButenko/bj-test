@@ -23,7 +23,8 @@ class TaskController extends Controller
     {
         $requestedPageNumber = 1;
         $taskCount = Task::getRowCount();
-        $tasksPerPage = 3;
+        $this->getPerPageSettingsFromRequest();
+        $tasksPerPage = $_SESSION['perPage'] ?? 3;
         $pageCount = intdiv($taskCount, $tasksPerPage) + (($taskCount % $tasksPerPage) ? 1 : 0);
 
         if (App::getInstance()->getRouter()->getClearUri() !== '') {
@@ -60,6 +61,7 @@ class TaskController extends Controller
             'tasksPerPage' => $tasksPerPage,
             'orderBy' => $orderBy,
             'orderDirection' => $orderDirection,
+            'perPage' => $tasksPerPage,
         ]);
     }
 
@@ -275,6 +277,11 @@ class TaskController extends Controller
 
             $_SESSION['orderDirection'] = $sortArgumentsErrors['orderDirection'] === false ? $_POST['orderDirection'] : 'DESC';
         }
+    }
+
+    private function getPerPageSettingsFromRequest()
+    {
+        $_SESSION['perPage'] = filter_input(INPUT_POST, 'perPage', FILTER_SANITIZE_NUMBER_INT) ?? $_SESSION['perPage'];
     }
 
     public static function getLastPageUrl()

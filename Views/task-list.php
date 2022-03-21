@@ -41,6 +41,17 @@
                         <option value="desc" <?php echo $orderDirection == 'desc' ? 'selected' : '' ?>>Desc</option>
                     </select>
                 </div>
+
+                <div class="col-auto">
+                    <label for="orderDirection" class="col-form-label">Per page:</label>
+                </div>
+                <div class="col-auto">
+                    <select id="perPage" name="perPage" class="form-select form-select-sm" aria-label="Default select example">
+                        <option value="3" <?php echo $perPage == '3' ? 'selected' : '' ?>>3</option>
+                        <option value="5" <?php echo $perPage == '5' ? 'selected' : '' ?>>5</option>
+                        <option value="10" <?php echo $perPage == '10' ? 'selected' : '' ?>>10</option>
+                    </select>
+                </div>
                 <div class="col-auto">
                     <button type="submit" class="btn btn-primary btn-sm">Apply</button>
                 </div>
